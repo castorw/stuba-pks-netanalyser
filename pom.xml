@@ -24,7 +24,7 @@
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
-                        <phase>install</phase>
+                        <phase>package</phase>
                         <goals>
                             <goal>copy-dependencies</goal>
                         </goals>
@@ -53,13 +53,13 @@
                 <version>2.6</version>
                 <executions>
                     <execution>
-                        <id>copy-libs</id>
+                        <id>copy-latest-build</id>
                         <phase>install</phase>
                         <goals>
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${basedir}/latest-builds/${project.version}</outputDirectory>
+                            <outputDirectory>${basedir}/latest-builds/${project.build.finalName}</outputDirectory>
                             <resources>          
                                 <resource>
                                     <directory>target</directory>
