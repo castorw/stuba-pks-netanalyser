@@ -22,8 +22,8 @@ Frame Parsers:
   * TCP Packet Parser
 
 **Screenshots**
-![Frame Info Screenshot](/screenshots/01_frame_info.png "1. Frame Info")
-![IPv4 Source Stats Screenshot](/screenshots/02_ipv4_source_stats.png "2. IPv4 Source Stats")
-![ARP Screenshot](/screenshots/03_arp.png "3. ARP")
-![ICMP Screenshot](/screenshots/04_icmp.png "4. ICMP")
-![About Dialog Screenshot](/screenshots/10_about.png "10. About Dialog")
+![Frame Info Screenshot](/screenshots/01_frame_info.png?raw=true "1. Frame Info")
+![IPv4 Source Stats Screenshot](/screenshots/02_ipv4_source_stats.png?raw=true "2. IPv4 Source Stats")
+![ARP Screenshot](/screenshots/03_arp.png?raw=true "3. ARP")
+![ICMP Screenshot](/screenshots/04_icmp.png?raw=true "4. ICMP")
+![About Dialog Screenshot](/screenshots/10_about.png?raw=true "10. About Dialog")
