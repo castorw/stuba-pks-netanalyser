@@ -47,6 +47,7 @@ public class TcpConnectionImpl implements TcpConnection {
             throw new TcpFrameNotMatchingException("This connection has already been closed");
         } else if ((this.state == TcpConnectionState.FIN2 || this.state == TcpConnectionState.RST) && frame.hasTcpFlag(TcpFlag.SYN)) {
             this.state = TcpConnectionState.LOCKED;
+            throw new TcpFrameNotMatchingException("Connection has just entered locked state");
         }
         if (this.state == TcpConnectionState.TWHS_SYN_SENT && direction == FrameDirection.SECOND_TO_FIRST && frame.hasTcpFlag(TcpFlag.SYN) && frame.hasTcpFlag(TcpFlag.ACK)) {
             this.state = TcpConnectionState.TWHS_SYN_ACK_RECEIVED;
@@ -75,7 +76,7 @@ public class TcpConnectionImpl implements TcpConnection {
 
     @Override
     public boolean isComplete() {
-        return (this.state == TcpConnectionState.FIN2 || this.state == TcpConnectionState.RST);
+        return (this.state == TcpConnectionState.LOCKED || this.state == TcpConnectionState.RST || this.state == TcpConnectionState.FIN2);
     }
 
     @Override
