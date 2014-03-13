@@ -8,6 +8,8 @@ public enum TcpConnectionState {
     TWHS_ACK_SENT,
     ESTABLISHED,
     FIN1,
+    FIN2_WAIT_ACK,
     FIN2,
-    RST
+    RST,
+    LOCKED
 }

@@ -43,8 +43,10 @@ public class TcpConnectionImpl implements TcpConnection {
         }
         if (direction == null) {
             throw new TcpFrameNotMatchingException("Frame does not match this connection");
-        } else if (this.state == TcpConnectionState.FIN2 || this.state == TcpConnectionState.RST) {
+        } else if (this.state == TcpConnectionState.LOCKED) {
             throw new TcpFrameNotMatchingException("This connection has already been closed");
+        } else if ((this.state == TcpConnectionState.FIN2 || this.state == TcpConnectionState.RST) && frame.hasTcpFlag(TcpFlag.SYN)) {
+            this.state = TcpConnectionState.LOCKED;
         }
         if (this.state == TcpConnectionState.TWHS_SYN_SENT && direction == FrameDirection.SECOND_TO_FIRST && frame.hasTcpFlag(TcpFlag.SYN) && frame.hasTcpFlag(TcpFlag.ACK)) {
             this.state = TcpConnectionState.TWHS_SYN_ACK_RECEIVED;
@@ -56,8 +58,10 @@ public class TcpConnectionImpl implements TcpConnection {
             if (this.state == TcpConnectionState.ESTABLISHED) {
                 this.state = TcpConnectionState.FIN1;
             } else if (this.state == TcpConnectionState.FIN1) {
-                this.state = TcpConnectionState.FIN2;
+                this.state = TcpConnectionState.FIN2_WAIT_ACK;
             }
+        } else if (this.state == TcpConnectionState.FIN2_WAIT_ACK && frame.hasTcpFlag(TcpFlag.ACK)) {
+            this.state = TcpConnectionState.FIN2;
         } else if (frame.hasTcpFlag(TcpFlag.RST)) {
             this.state = TcpConnectionState.RST;
         }

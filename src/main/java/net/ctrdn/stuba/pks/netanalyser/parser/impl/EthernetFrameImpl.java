@@ -28,10 +28,14 @@ public class EthernetFrameImpl implements EthernetFrame {
     private final Buffer dataBuffer;
 
     public EthernetFrameImpl(Integer frameId, PcapPacket packet) throws FrameAnalysisException {
+        int wireLen = packet.getPacketHeader().getOrigLen() + 4;
+        if (wireLen < 64) {
+            wireLen = 64;
+        }
         this.frameId = frameId;
         this.captureTimeOffset = packet.getPacketHeader().getTsUsec();
         this.originalLength = packet.getPacketHeader().getOrigLen();
-        this.wireLength = packet.getPacketHeader().getInclLen();
+        this.wireLength = wireLen;
         this.dataBuffer = packet.getPacketData();
         this.sourceMacAddress = new byte[6];
         this.destinationMacAddress = new byte[6];
