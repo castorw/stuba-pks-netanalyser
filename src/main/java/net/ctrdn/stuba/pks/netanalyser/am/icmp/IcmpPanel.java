@@ -5,7 +5,6 @@
  */
 package net.ctrdn.stuba.pks.netanalyser.am.icmp;
 
-import net.ctrdn.stuba.pks.netanalyser.am.frameinfo.*;
 import java.util.List;
 import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
@@ -15,7 +14,6 @@ import net.ctrdn.stuba.pks.netanalyser.common.DataTypeHelpers;
 import net.ctrdn.stuba.pks.netanalyser.common.NonEditableColorableDefaultTableModel;
 import net.ctrdn.stuba.pks.netanalyser.exception.AnalyserModuleException;
 import net.ctrdn.stuba.pks.netanalyser.exception.DataTypeException;
-import net.ctrdn.stuba.pks.netanalyser.parser.EthernetFrame;
 import net.ctrdn.stuba.pks.netanalyser.parser.IcmpFrame;
 import org.krakenapps.pcap.util.Buffer;
 
