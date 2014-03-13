@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package net.ctrdn.stuba.pks.netanalyser;
 
 import java.awt.Frame;
@@ -17,10 +12,6 @@ import net.ctrdn.stuba.pks.netanalyser.annotation.FrameParser;
 import net.ctrdn.stuba.pks.netanalyser.common.NonEditableColorableDefaultTableModel;
 import net.ctrdn.stuba.pks.netanalyser.parser.EthernetFrame;
 
-/**
- *
- * @author castor
- */
 public class AboutDialog extends javax.swing.JDialog {
 
     private final AnalyserDialog analyserDialog;

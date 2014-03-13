@@ -48,26 +48,24 @@
                     </archive>
                 </configuration>
             </plugin>
-            <!--
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>2.6</version>
                 <executions>
                     <execution>
-                        <id>copy-latest-build</id>
+                        <id>copy-external-resources</id>
                         <phase>install</phase>
                         <goals>
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${basedir}/latest-builds/${project.build.finalName}</outputDirectory>
+                            <outputDirectory>target</outputDirectory>
                             <resources>          
                                 <resource>
-                                    <directory>target</directory>
-                                    <filtering>true</filtering>
+                                    <directory>${basedir}</directory>
+                                    <filtering>false</filtering>
                                     <includes>
-                                        <include>${project.build.finalName}.jar</include>
-                                        <include>lib/</include>
+                                        <include>resources/</include>
                                     </includes>
                                 </resource>
                             </resources>              
@@ -75,7 +73,6 @@
                     </execution>
                 </executions>
             </plugin>
-            -->
         </plugins>
         <resources>
             <resource>

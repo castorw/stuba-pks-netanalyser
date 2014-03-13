@@ -1,11 +1,11 @@
 package net.ctrdn.stuba.pks.netanalyser.common;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.StringReader;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,17 +29,17 @@ import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
 public class DataTypeHelpers {
-    
+
     private static Document icmpParamsDocument;
     private static XPath icmpParamsXpath;
     private static Map<Integer, String> udpServiceMap;
     private static Map<Integer, String> tcpServiceMap;
-    
+
     public final static void initialize() {
         try {
-            DataTypeHelpers.icmpParamsDocument = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(DataTypeHelpers.class.getResourceAsStream("/net/ctrdn/stuba/pks/netanalyser/resource/iana-icmp-parameters.xml"));
+            DataTypeHelpers.icmpParamsDocument = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new FileInputStream(new File("resources/iana-icmp-parameters.xml")));
             DataTypeHelpers.icmpParamsXpath = XPathFactory.newInstance().newXPath();
-            InputStream servicesInputStream = DataTypeHelpers.class.getResourceAsStream("/net/ctrdn/stuba/pks/netanalyser/resource/services.dat");
+            InputStream servicesInputStream = new FileInputStream(new File("resources/services.dat"));
             BufferedReader servicesReader = new BufferedReader(new InputStreamReader(servicesInputStream));
             DataTypeHelpers.udpServiceMap = new HashMap<>();
             DataTypeHelpers.tcpServiceMap = new HashMap<>();
@@ -61,7 +61,7 @@ public class DataTypeHelpers {
             ex.printStackTrace();
         }
     }
-    
+
     public static String getReadableByteSize(long size) {
         if (size <= 0) {
             return "0";
@@ -70,7 +70,7 @@ public class DataTypeHelpers {
         int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
         return new DecimalFormat("#,##0.#").format(size / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
     }
-    
+
     public final static short getUnsignedByteValue(byte b) {
         if (b < 0) {
             return (short) (b & 0xff);
@@ -78,7 +78,7 @@ public class DataTypeHelpers {
             return b;
         }
     }
-    
+
     public final static int getUnsignedShortValue(short s) {
         if (s < 0) {
             return (s & 0xffff);
@@ -86,13 +86,13 @@ public class DataTypeHelpers {
             return s;
         }
     }
-    
+
     public final static int getUnsignedShortFromBytes(byte msb, byte lsb) {
         short targetShort = DataTypeHelpers.getUnsignedByteValue(lsb);
         targetShort |= (msb << 8);
         return DataTypeHelpers.getUnsignedShortValue(targetShort);
     }
-    
+
     public final static String getMacAddressString(byte[] macAddress) throws DataTypeException {
         if (macAddress.length != 6) {
             throw new DataTypeException("Invalid MAC address byte array length (" + macAddress.length + ")");
@@ -107,7 +107,7 @@ public class DataTypeHelpers {
         }
         return sb.toString().toUpperCase();
     }
-    
+
     public final static String getIPv4AddressString(byte[] ipv4Address) throws DataTypeException {
         if (ipv4Address.length != 4) {
             throw new DataTypeException("Invalid IPv4 address byte array length (" + ipv4Address.length + ")");
@@ -122,7 +122,7 @@ public class DataTypeHelpers {
         }
         return sb.toString().toUpperCase();
     }
-    
+
     public final static String getFrameTypeString(EthernetFrameType frameType) {
         switch (frameType) {
             case ETHERNET2: {
@@ -142,7 +142,7 @@ public class DataTypeHelpers {
             }
         }
     }
-    
+
     public final static String getArpHardwareTypeString(ArpHardwareType type) {
         switch (type) {
             case ETHERNET: {
@@ -153,7 +153,7 @@ public class DataTypeHelpers {
             }
         }
     }
-    
+
     public final static String getArpProtocolTypeString(ArpProtocolType type) {
         switch (type) {
             case INTERNET_PROTOCOL_V4: {
@@ -164,7 +164,7 @@ public class DataTypeHelpers {
             }
         }
     }
-    
+
     public final static String getArpOperationString(ArpOperation operation) {
         switch (operation) {
             case ARP_REQUEST: {
@@ -178,7 +178,7 @@ public class DataTypeHelpers {
             }
         }
     }
-    
+
     public final static String getTcpFlagsString(TcpFrame frame) {
         StringBuilder sb = new StringBuilder();
         boolean added = false;
@@ -193,7 +193,7 @@ public class DataTypeHelpers {
         }
         return sb.toString();
     }
-    
+
     public final static String getFrameDataFormatted(Buffer buffer, int bytesPerLine) {
         StringBuilder sb = new StringBuilder();
         int inLine = 0;
@@ -211,7 +211,7 @@ public class DataTypeHelpers {
         }
         return sb.toString().toUpperCase();
     }
-    
+
     public final static String getIcmpTypeString(short icmpTypeNumber) throws DataTypeException {
         try {
             Element descriptionElement = (Element) DataTypeHelpers.icmpParamsXpath.evaluate("/registry/registry[@id='icmp-parameters-types']/record[value='" + icmpTypeNumber + "']/description", DataTypeHelpers.icmpParamsDocument, XPathConstants.NODE);
@@ -223,7 +223,7 @@ public class DataTypeHelpers {
             throw finalEx;
         }
     }
-    
+
     public final static String getIcmpCodeString(short icmpTypeNumber, short icmpCodeNumber) throws DataTypeException {
         try {
             Element descriptionElement = (Element) DataTypeHelpers.icmpParamsXpath.evaluate("/registry/registry[@id='icmp-parameters-codes']/registry[@id='icmp-parameters-codes-" + icmpTypeNumber + "']/record[value='" + icmpCodeNumber + "']/description", DataTypeHelpers.icmpParamsDocument, XPathConstants.NODE);
@@ -235,7 +235,7 @@ public class DataTypeHelpers {
             throw finalEx;
         }
     }
-    
+
     public final static String getPortServiceString(IPv4FrameProtocol protocol, int port) throws DataTypeException {
         switch (protocol) {
             case TCP: {
