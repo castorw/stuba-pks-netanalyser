@@ -48,9 +48,7 @@ public class EthernetFrameImpl implements EthernetFrame {
         this.etherTypeBytes = new byte[2];
         this.etherTypeBytes[0] = this.dataBuffer.get();
         this.etherTypeBytes[1] = this.dataBuffer.get();
-        short dataBufferShort = this.etherTypeBytes[1];
-        dataBufferShort |= this.etherTypeBytes[0] << 8;
-        int dataBufferInt = (dataBufferShort < 0) ? dataBufferShort & 0xffff : dataBufferShort;
+        int dataBufferInt = DataTypeHelpers.getUnsignedShortFromBytes(this.etherTypeBytes[0], this.etherTypeBytes[1]);
         EthernetFrameType newFrameType = null;
         if (dataBufferInt >= 1536) {
             newFrameType = EthernetFrameType.ETHERNET2;
@@ -59,9 +57,9 @@ public class EthernetFrameImpl implements EthernetFrame {
             firstTwoBytes[0] = this.dataBuffer.get();
             firstTwoBytes[1] = this.dataBuffer.get();
             this.dataBuffer.skip(-2);
-            if (firstTwoBytes[0] == 0xff && firstTwoBytes[1] == 0xff) {
+            if (DataTypeHelpers.getUnsignedByteValue(firstTwoBytes[0]) == 0xff && DataTypeHelpers.getUnsignedByteValue(firstTwoBytes[1]) == 0xff) {
                 newFrameType = EthernetFrameType.ETHERNET_RAW;
-            } else if (firstTwoBytes[0] == 0xaa && firstTwoBytes[1] == 0xaa) {
+            } else if (DataTypeHelpers.getUnsignedByteValue(firstTwoBytes[0]) == 0xaa && DataTypeHelpers.getUnsignedByteValue(firstTwoBytes[1]) == 0xaa) {
                 newFrameType = EthernetFrameType.ETHERNET_SNAP;
             } else {
                 newFrameType = EthernetFrameType.ETHERNET_LLC;
